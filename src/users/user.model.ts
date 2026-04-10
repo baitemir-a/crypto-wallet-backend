@@ -6,7 +6,7 @@ interface UserCreationAttribute{
   password:string,
   lastname:string,
   firstname:string
-  avatar:string
+  avatar?:string
 }
 @Table({
   tableName: 'users',
@@ -46,7 +46,7 @@ export class User extends Model<User, UserCreationAttribute> {
   @ApiProperty({example:"image.jpg", description:"user's profile picture"})
   @Column({
     type: DataType.STRING,
-    allowNull:false
+    allowNull:true
   })
   avatar: string;
 

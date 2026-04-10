@@ -6,8 +6,10 @@ import { ValidationException } from '../exceptions/ValidationException';
 @Injectable()
 export class ValidationPipe implements PipeTransform{
   async transform(value: any, metadata: ArgumentMetadata) {
+    if (!metadata.metatype || !this.toValidate(metadata.metatype)) {
+      return value;
+    }
     const obj = plainToClass(metadata.metatype, value)
-    console.log(obj);
     const errors = await validate(obj);
     if (errors.length){
       let messages = errors.map((error)=>{
@@ -16,5 +18,10 @@ export class ValidationPipe implements PipeTransform{
       throw new ValidationException(messages);
     }
     return value
+  }
+
+  private toValidate(metatype: Function): boolean {
+    const types: Function[] = [String, Boolean, Number, Array, Object];
+    return !types.includes(metatype);
   }
 }

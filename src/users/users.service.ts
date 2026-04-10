@@ -12,7 +12,7 @@ export class UsersService {
   }
 
   async createUser(dto: CreateUserDto, image:any) {
-    const fileName = await this.fileService.createFile(image);
+    const fileName = image ? await this.fileService.createFile(image) : null;
     return await this.userRepo.create({ ...dto, avatar:fileName });
   }
 
